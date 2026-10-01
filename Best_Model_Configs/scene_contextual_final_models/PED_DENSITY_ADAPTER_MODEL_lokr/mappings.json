@@ -1,0 +1,12 @@
+{
+    "label2id": {
+        "high_pedestrian_density": 0,
+        "low_pedestrian_density": 1,
+        "medium_pedestrian_density": 2
+    },
+    "id2label": {
+        "0": "high_pedestrian_density",
+        "1": "low_pedestrian_density",
+        "2": "medium_pedestrian_density"
+    }
+}

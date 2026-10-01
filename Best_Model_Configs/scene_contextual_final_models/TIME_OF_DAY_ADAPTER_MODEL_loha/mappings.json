@@ -1,0 +1,10 @@
+{
+    "label2id": {
+        "day": 0,
+        "night": 1
+    },
+    "id2label": {
+        "0": "day",
+        "1": "night"
+    }
+}

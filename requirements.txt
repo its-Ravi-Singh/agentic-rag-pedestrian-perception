@@ -1,0 +1,13 @@
+transformers
+peft
+ultralytics
+fvcore
+pandas
+numpy
+scipy
+scikit-learn
+seaborn
+matplotlib
+tqdm
+pyyaml
+opencv-python

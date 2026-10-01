@@ -1,0 +1,10 @@
+{
+    "label2id": {
+        "narrow_road": 0,
+        "wide_road": 1
+    },
+    "id2label": {
+        "0": "narrow_road",
+        "1": "wide_road"
+    }
+}

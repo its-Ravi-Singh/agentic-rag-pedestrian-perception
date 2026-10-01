@@ -1,0 +1,10 @@
+{
+    "label2id": {
+        "looking": 0,
+        "not_looking": 1
+    },
+    "id2label": {
+        "0": "looking",
+        "1": "not_looking"
+    }
+}

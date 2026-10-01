@@ -1,0 +1,126 @@
+charviku@cpn-i14-35:~/Revision_1/YOLO_Model_Training$ python yolo_model_training.py --mode train
+
+Launching training …
+New https://pypi.org/project/ultralytics/8.3.169 available 😃 Update with 'pip install -U ultralytics'
+Ultralytics 8.3.166 🚀 Python-3.9.6 torch-1.13.1 CUDA:0 (NVIDIA H100 PCIe, 81090MiB)
+WARNING ⚠️ Upgrade to torch>=2.0.0 for deterministic training.
+engine/trainer: agnostic_nms=False, amp=True, augment=False, auto_augment=randaugment, batch=16, bgr=0.0, box=7.5, cache=False, cfg=None, classes=None, close_mosaic=10, cls=0.5, conf=None, copy_paste=0.0, copy_paste_mode=flip, cos_lr=False, cutmix=0.0, data=/projects/academic/shamsadp/JAAD_Yolo_Training_Dataset/data.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.0, dynamic=False, embed=None, epochs=10, erasing=0.4, exist_ok=False, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=False, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, imgsz=640, int8=False, iou=0.7, keras=False,kobj=1.0, line_width=None, lr0=0.01, lrf=0.01, mask_ratio=4, max_det=300, mixup=0.0, mode=train, model=yolov8l.pt, momentum=0.937, mosaic=1.0, multi_scale=False, name=yolov8l_10e, nbs=64, nms=False, opset=None, optimize=False, optimizer=auto, overlap_mask=True, patience=100, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=yolo_jaad_runs, rect=False, resume=False, retina_masks=False, save=True, save_conf=False, save_crop=False, save_dir=yolo_jaad_runs/yolov8l_10e, save_frames=False, save_json=False, save_period=-1, save_txt=False, scale=0.5, seed=0, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.1, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=3.0, warmup_momentum=0.8, weight_decay=0.0005, workers=8, workspace=None
+Overriding model.yaml nc=80 with nc=3
+
+                   from  n    params  module                                       arguments
+  0                  -1  1      1856  ultralytics.nn.modules.conv.Conv             [3, 64, 3, 2]
+  1                  -1  1     73984  ultralytics.nn.modules.conv.Conv             [64, 128, 3, 2]
+  2                  -1  3    279808  ultralytics.nn.modules.block.C2f             [128, 128, 3, True]
+  3                  -1  1    295424  ultralytics.nn.modules.conv.Conv             [128, 256, 3, 2]
+  4                  -1  6   2101248  ultralytics.nn.modules.block.C2f             [256, 256, 6, True]
+  5                  -1  1   1180672  ultralytics.nn.modules.conv.Conv             [256, 512, 3, 2]
+  6                  -1  6   8396800  ultralytics.nn.modules.block.C2f             [512, 512, 6, True]
+  7                  -1  1   2360320  ultralytics.nn.modules.conv.Conv             [512, 512, 3, 2]
+  8                  -1  3   4461568  ultralytics.nn.modules.block.C2f             [512, 512, 3, True]
+  9                  -1  1    656896  ultralytics.nn.modules.block.SPPF            [512, 512, 5]
+ 10                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']
+ 11             [-1, 6]  1         0  ultralytics.nn.modules.conv.Concat           [1]
+ 12                  -1  3   4723712  ultralytics.nn.modules.block.C2f             [1024, 512, 3]
+ 13                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']
+ 14             [-1, 4]  1         0  ultralytics.nn.modules.conv.Concat           [1]
+ 15                  -1  3   1247744  ultralytics.nn.modules.block.C2f             [768, 256, 3]
+ 16                  -1  1    590336  ultralytics.nn.modules.conv.Conv             [256, 256, 3, 2]
+ 17            [-1, 12]  1         0  ultralytics.nn.modules.conv.Concat           [1]
+ 18                  -1  3   4592640  ultralytics.nn.modules.block.C2f             [768, 512, 3]
+ 19                  -1  1   2360320  ultralytics.nn.modules.conv.Conv             [512, 512, 3, 2]
+ 20             [-1, 9]  1         0  ultralytics.nn.modules.conv.Concat           [1]
+ 21                  -1  3   4723712  ultralytics.nn.modules.block.C2f             [1024, 512, 3]
+ 22        [15, 18, 21]  1   5585113  ultralytics.nn.modules.head.Detect           [3, [256, 512, 512]]
+Model summary: 209 layers, 43,632,153 parameters, 43,632,137 gradients, 165.4 GFLOPs
+
+Transferred 589/595 items from pretrained weights
+Freezing layer 'model.22.dfl.conv.weight'
+AMP: running Automatic Mixed Precision (AMP) checks...
+AMP: checks passed ✅
+train: Fast image access ✅ (ping: 0.0±0.0 ms, read: 737.4±544.0 MB/s, size: 427.7 KB)
+train: Scanning /projects/academic/shamsadp/JAAD_Yolo_Training_Dataset/labels/train... 52658 images, 0 backgrounds, 0 corrupt:
+train: /projects/academic/shamsadp/JAAD_Yolo_Training_Dataset/images/train/293_16.jpg: 1 duplicate labels removed
+train: New cache created: /projects/academic/shamsadp/JAAD_Yolo_Training_Dataset/labels/train.cache
+/cvmfs/soft.ccr.buffalo.edu/versions/2023.01/easybuild/software/avx512/MPI/gcc/11.2.0/openmpi/4.1.1/pytorch/1.13.1-CUDA-11.8.0/lib/python3.9/site-packages/torch/utils/data/dataloader.py:554: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 7, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker numberto avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+val: Fast image access ✅ (ping: 0.0±0.0 ms, read: 40.6±34.8 MB/s, size: 446.7 KB)
+val: Scanning /projects/academic/shamsadp/JAAD_Yolo_Training_Dataset/labels/val... 15045 images, 0 backgrounds, 0 corrupt: 100
+val: New cache created: /projects/academic/shamsadp/JAAD_Yolo_Training_Dataset/labels/val.cache
+/cvmfs/soft.ccr.buffalo.edu/versions/2023.01/easybuild/software/avx512/MPI/gcc/11.2.0/openmpi/4.1.1/pytorch/1.13.1-CUDA-11.8.0/lib/python3.9/site-packages/torch/utils/data/dataloader.py:554: UserWarning: This DataLoader will create 16 worker processesin total. Our suggested max number of worker in current system is 7, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+Plotting labels to yolo_jaad_runs/yolov8l_10e/labels.jpg...
+optimizer: 'optimizer=auto' found, ignoring 'lr0=0.01' and 'momentum=0.937' and determining best 'optimizer', 'lr0' and 'momentum' automatically...
+optimizer: AdamW(lr=0.001429, momentum=0.9) with parameter groups 97 weight(decay=0.0), 104 weight(decay=0.0005), 103 bias(decay=0.0)
+Image sizes 640 train, 640 val
+Using 8 dataloader workers
+Logging results to yolo_jaad_runs/yolov8l_10e
+Starting training for 10 epochs...
+Closing dataloader mosaic
+/cvmfs/soft.ccr.buffalo.edu/versions/2023.01/easybuild/software/avx512/MPI/gcc/11.2.0/openmpi/4.1.1/pytorch/1.13.1-CUDA-11.8.0/lib/python3.9/site-packages/torch/utils/data/dataloader.py:554: UserWarning: This DataLoader will create 8 worker processes in total. Our suggested max number of worker in current system is 7, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker numberto avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       1/10      8.88G      1.404      1.044      1.046          5        640: 100%|██████████| 3292/3292 [07:25<00:00,  7.39i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [01:07<00:0
+                   all      15045      77376      0.635      0.557      0.572      0.332
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       2/10      9.69G      1.365     0.8955      1.037         10        640: 100%|██████████| 3292/3292 [06:40<00:00,  8.22i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [00:50<00:0
+                   all      15045      77376      0.761      0.604      0.673      0.409
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       3/10      9.69G      1.301     0.8004      1.012          9        640: 100%|██████████| 3292/3292 [06:26<00:00,  8.52i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [01:03<00:0
+                   all      15045      77376      0.843      0.676      0.762      0.476
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       4/10      9.69G      1.236      0.713     0.9867         11        640: 100%|██████████| 3292/3292 [06:20<00:00,  8.64i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [01:00<00:0
+                   all      15045      77376      0.895      0.738      0.827      0.532
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       5/10      9.69G      1.177     0.6452     0.9655          6        640: 100%|██████████| 3292/3292 [06:30<00:00,  8.43i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [00:47<00:0
+                   all      15045      77376      0.908      0.773      0.864      0.572
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       6/10      9.69G      1.124     0.5929     0.9472         10        640: 100%|██████████| 3292/3292 [06:19<00:00,  8.68i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [01:03<00:0
+                   all      15045      77376      0.925      0.807      0.892      0.604
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       7/10      9.69G      1.074     0.5475     0.9317          5        640: 100%|██████████| 3292/3292 [06:19<00:00,  8.67i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [01:03<00:0
+                   all      15045      77376      0.933      0.836      0.912      0.627
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       8/10      9.69G      1.028     0.5099     0.9173          5        640: 100%|██████████| 3292/3292 [09:21<00:00,  5.86i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [03:59<00:0
+                   all      15045      77376      0.949      0.853      0.927       0.65
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+       9/10      9.69G     0.9787     0.4768     0.9032          3        640: 100%|██████████| 3292/3292 [10:43<00:00,  5.11i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [04:07<00:0
+                   all      15045      77376      0.956      0.863      0.937      0.669
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+      10/10      9.69G     0.9358     0.4485      0.891          5        640: 100%|██████████| 3292/3292 [12:05<00:00,  4.54i
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [03:52<00:0
+                   all      15045      77376      0.954      0.872      0.942       0.68
+
+10 epochs completed in 1.636 hours.
+Optimizer stripped from yolo_jaad_runs/yolov8l_10e/weights/last.pt, 87.6MB
+Optimizer stripped from yolo_jaad_runs/yolov8l_10e/weights/best.pt, 87.6MB
+
+Validating yolo_jaad_runs/yolov8l_10e/weights/best.pt...
+Ultralytics 8.3.166 🚀 Python-3.9.6 torch-1.13.1 CUDA:0 (NVIDIA H100 PCIe, 81090MiB)
+Model summary (fused): 112 layers, 43,608,921 parameters, 0 gradients, 164.8 GFLOPs
+                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100%|██████████| 471/471 [02:10<00:0
+                   all      15045      77376      0.954      0.871      0.942       0.68
+            pedestrian      13514      26445      0.983      0.919      0.968      0.781
+                   ped      12213      48485       0.95       0.82      0.916      0.617
+                people       1964       2446       0.93      0.875      0.941      0.642
+Speed: 0.0ms preprocess, 1.0ms inference, 0.0ms loss, 0.4ms postprocess per image
+Results saved to yolo_jaad_runs/yolov8l_10e
+charviku@cpn-i14-35:~/Revision_1/YOLO_Model_Training$

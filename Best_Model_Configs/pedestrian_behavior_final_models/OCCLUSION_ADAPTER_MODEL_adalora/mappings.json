@@ -1,0 +1,12 @@
+{
+    "label2id": {
+        "full_occlusion": 0,
+        "no_occlusion": 1,
+        "partial_occlusion": 2
+    },
+    "id2label": {
+        "0": "full_occlusion",
+        "1": "no_occlusion",
+        "2": "partial_occlusion"
+    }
+}
