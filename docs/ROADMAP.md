@@ -86,13 +86,15 @@ All splits are by video or sequence, so frames from the same clip never appear i
 
 ## Milestones
 
+The agent and scene memory are built and tested on JAAD first. PIE and BDD100K are added once that works end to end.
+
 | Week | Dates | Work |
 |---|---|---|
-| 1 | Oct 6 - Oct 12 | Restructure the code into a package with configs; loaders for JAAD, PIE and BDD100K; shared multi-adapter backbone; JAAD feature cache and baseline numbers |
-| 2 | Oct 13 - Oct 19 | Joint adapter fine-tuning; target masks; baselines; router, confidence check, escalation and decision log on JAAD |
-| 3 | Oct 20 - Oct 26 | Feature caches for all three datasets; joint router; scene memory; per-dataset results |
-| 4 | Oct 27 - Nov 2 | Live latency benchmark; ablations; explanation summaries; Gradio demo |
-| 5 | Nov 3 - Nov 6 | Results tables in the README; report; cleanup and release |
+| 1 | Oct 6 - Oct 12 | Restructure the code into a package with configs; JAAD loader with official video splits; shared multi-adapter backbone; JAAD feature cache, baseline numbers and calibration |
+| 2 | Oct 13 - Oct 19 | Target masks; baselines; router, confidence check, escalation and decision log on JAAD; escalation ablation |
+| 3 | Oct 20 - Oct 26 | Scene memory and explanation summaries on JAAD; download PIE and BDD100K; loaders for both |
+| 4 | Oct 27 - Nov 2 | Joint adapter fine-tuning on all three datasets; joint router; per-dataset results; live latency benchmark; Gradio demo |
+| 5 | Nov 3 - Nov 6 | Ablations; results tables in the README; report; cleanup and release |
 
 ## Planned layout
 
