@@ -4,3 +4,8 @@
 
 # Local working notes (not published)
 notes/
+
+# Dataset and local environment
+JAAD/
+venv/
+Generated_Data/

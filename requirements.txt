@@ -1,5 +1,5 @@
-transformers
-peft
+transformers==4.46.3
+peft==0.13.2
 ultralytics
 fvcore
 pandas
