@@ -9,3 +9,7 @@ notes/
 JAAD/
 venv/
 Generated_Data/
+
+# Python build files
+__pycache__/
+*.egg-info/
