@@ -1,0 +1,15 @@
+base_model: google/vit-base-patch16-224-in21k
+yolo: Best_Model_Configs/yolo_best_model.pt
+
+# each folder has adapter weights + mappings.json
+pedestrian_behavior:      # run on pedestrian crops
+  action:    Best_Model_Configs/pedestrian_behavior_final_models/ACTION_ADAPTER_MODEL_loha
+  look:      Best_Model_Configs/pedestrian_behavior_final_models/LOOK_ADAPTER_MODEL_loha
+  cross:     Best_Model_Configs/pedestrian_behavior_final_models/CROSS_ADAPTER_MODEL_adalora
+  occlusion: Best_Model_Configs/pedestrian_behavior_final_models/OCCLUSION_ADAPTER_MODEL_adalora
+
+scene_context:            # run on full frames
+  ped_density:   Best_Model_Configs/scene_contextual_final_models/PED_DENSITY_ADAPTER_MODEL_lora
+  weather:       Best_Model_Configs/scene_contextual_final_models/WEATHER_ADAPTER_MODEL_lora
+  time_of_day:   Best_Model_Configs/scene_contextual_final_models/TIME_OF_DAY_ADAPTER_MODEL_lora
+  road_presence: Best_Model_Configs/scene_contextual_final_models/ROAD_PRESENCE_ADAPTER_MODEL_lora
