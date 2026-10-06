@@ -81,6 +81,8 @@ This project requires the **JAAD (Joint Attention in Autonomous Driving)** datas
 
 ## Running the Analysis Pipeline
 
+The original pipeline scripts live in `legacy/`. Run them from the repository root so the relative paths to `JAAD/`, `Best_Model_Configs/` and `Generated_Data/` still resolve.
+
 The pipeline is designed to be run in three sequential steps. Ensure you have activated your virtual environment (`source venv/bin/activate`) before running the scripts.
 
 ### Step 1: Extract and Prepare Annotations
@@ -88,7 +90,7 @@ The pipeline is designed to be run in three sequential steps. Ensure you have ac
 This initial step parses the raw JAAD XML annotation files, normalizes the labels, and generates a clean CSV file that serves as the ground truth for all subsequent steps.
 
 ```bash
-python jaad_annotations_extraction_step1.py
+python legacy/jaad_annotations_extraction_step1.py
 ```
 -   **Input**: `JAAD/annotations/` and `JAAD/annotations_attributes/`
 -   **Output**: `Generated_Data/jaad_annotations_extracted_data_step1.csv`
@@ -102,7 +104,7 @@ This step uses the pre-trained models to perform inference on the video clips, g
 -   **A) Pedestrian Behavior Inference**:
     This script runs the two-stage pipeline: YOLO detects pedestrians, and then the behavior adapters classify their actions, gaze, and crossing status.
     ```bash
-    python inference_pedestrian_behavior_step2.py
+    python legacy/inference_pedestrian_behavior_step2.py
     ```
     -   **Input**: `JAAD/JAAD_clips/`, `Generated_Data/jaad_annotations_extracted_data_step1.csv`, and models from `Best_Model_Configs/`.
     -   **Output**: `Generated_Data/raw_data_pedestrian_behavior_step2.csv`
@@ -111,7 +113,7 @@ This step uses the pre-trained models to perform inference on the video clips, g
 -   **B) Scene Context Inference**:
     This script runs the scene-level adapters on full video frames to classify the environment (weather, time of day, etc.).
     ```bash
-    python inference_scene_context_step2.py
+    python legacy/inference_scene_context_step2.py
     ```
     -   **Input**: `JAAD/JAAD_clips/` and models from `Best_Model_Configs/`.
     -   **Output**: `Generated_Data/raw_data_scene_contextual_analysis_step2.csv`
@@ -125,7 +127,7 @@ This final step processes the raw data from Step 2 to generate all reports and v
 -   **A) Analyze Pedestrian Behavior Metrics**:
     Analyzes the performance of the behavior adapters, including classification accuracy, latency, and confidence.
     ```bash
-    python analyze_metrics_pedestrian_behavior_step3.py
+    python legacy/analyze_metrics_pedestrian_behavior_step3.py
     ```
     -   **Input**: `Generated_Data/raw_data_pedestrian_behavior_step2.csv`
     -   **Output**: Plots and reports in `Analysis_Plots_Pedestrian_Behavior/`
@@ -133,7 +135,7 @@ This final step processes the raw data from Step 2 to generate all reports and v
 -   **B) Analyze Scene Context Metrics**:
     Analyzes the performance of the scene adapters and compares them against the YOLO baseline.
     ```bash
-    python analyze_metrics_scene_context_step3.py
+    python legacy/analyze_metrics_scene_context_step3.py
     ```
     -   **Input**: `Generated_Data/raw_data_scene_contextual_analysis_step2.csv`
     -   **Output**: Plots and reports in `Scene_Context_Analysis_Plots/`
@@ -141,16 +143,16 @@ This final step processes the raw data from Step 2 to generate all reports and v
 -   **C) Run Ablation Study**:
     Compares the computational cost and performance of the adaptive approach against a non-adaptive baseline.
     ```bash
-    python ablation_studies.py
+    python legacy/ablation_studies.py
     ```
     -   **Input**: Both CSVs from `Generated_Data/`.
     -   **Output**: Report and plot in `Ablation_Studies_Report/`
 
 ## Script Descriptions
 
--   `jaad_annotations_extraction_step1.py`: Extracts, cleans, and normalizes annotations from the raw JAAD XML files.
--   `inference_pedestrian_behavior_step2.py`: Runs YOLO and ViT adapters to infer pedestrian-specific behaviors and matches them with ground truth.
--   `inference_scene_context_step2.py`: Runs ViT adapters on full frames to classify scene-level attributes (e.g., weather, density).
--   `analyze_metrics_pedestrian_behavior_step3.py`: Generates the final set of reports and visualizations for the pedestrian behavior analysis.
--   `analyze_metrics_scene_context_step3.py`: Generates the final set of reports and visualizations for the scene context analysis.
--   `ablation_studies.py`: Simulates and compares the performance of an adaptive analysis strategy versus a baseline non-adaptive one.
+-   `legacy/jaad_annotations_extraction_step1.py`: Extracts, cleans, and normalizes annotations from the raw JAAD XML files.
+-   `legacy/inference_pedestrian_behavior_step2.py`: Runs YOLO and ViT adapters to infer pedestrian-specific behaviors and matches them with ground truth.
+-   `legacy/inference_scene_context_step2.py`: Runs ViT adapters on full frames to classify scene-level attributes (e.g., weather, density).
+-   `legacy/analyze_metrics_pedestrian_behavior_step3.py`: Generates the final set of reports and visualizations for the pedestrian behavior analysis.
+-   `legacy/analyze_metrics_scene_context_step3.py`: Generates the final set of reports and visualizations for the scene context analysis.
+-   `legacy/ablation_studies.py`: Simulates and compares the performance of an adaptive analysis strategy versus a baseline non-adaptive one.
