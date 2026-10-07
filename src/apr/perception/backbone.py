@@ -1,62 +1,96 @@
 import torch
+from transformers import AutoImageProcessor, ViTForImageClassification
 from peft import PeftConfig, PeftMixedModel
 from peft.utils import set_peft_model_state_dict
 from safetensors.torch import load_file
-from transformers import AutoImageProcessor, ViTForImageClassification
 
 from apr.config import load_adapters, load_yaml
 from apr.utils import get_device
 
-
 class AdapterBank:
-    # one vit with all 8 adapters on it, switch using adapter name
+    def __init__(self, groups=["pedestrian_behavior", "scene_context"], device=None):
+        if device is None:
+            self.device = get_device()
+        else:
+            self.device = device
+            
+        cfg_yaml = load_yaml("adapters.yaml")
+        base_mdl = cfg_yaml['base_model']
+        
+        self.processor = AutoImageProcessor.from_pretrained(base_mdl)
 
-    def __init__(self, groups=("pedestrian_behavior", "scene_context"), device=None):
-        self.device = device or get_device()
-        base_name = load_yaml("adapters.yaml")["base_model"]
-        self.processor = AutoImageProcessor.from_pretrained(base_name)
+        # load base and strip out the original head
+        base_vit = ViTForImageClassification.from_pretrained(base_mdl, num_labels=2)
+        base_vit.classifier = torch.nn.Identity()
 
-        base = ViTForImageClassification.from_pretrained(base_name, num_labels=2)
-        base.classifier = torch.nn.Identity()
-
-        self.adapters = {}
+        self.all_adapters = {}
         for g in groups:
-            self.adapters.update(load_adapters(g))
+            res = load_adapters(g)
+            for k, v in res.items():
+                self.all_adapters[k] = v
 
         self.model = None
-        self.heads = {}
-        for name, info in self.adapters.items():
-            cfg = PeftConfig.from_pretrained(info["path"])
-            # heads have diffrent number of classes so we load them seperately
-            cfg.modules_to_save = None
-            cfg.inference_mode = True
-            w = load_file(info["path"] / "adapter_model.safetensors")
+        self.class_heads = {}
+        
+        for n, info in self.all_adapters.items():
+            conf = PeftConfig.from_pretrained(info['path'])
+            
+            # fix shape mismatch crash from diff classes
+            conf.modules_to_save = None
+            conf.inference_mode = True
+            
+            p = str(info['path']) + "/adapter_model.safetensors"
+            weights = load_file(p)
 
-            head_w = {k.split("classifier.")[1]: v for k, v in w.items() if "classifier" in k}
-            head = torch.nn.Linear(head_w["weight"].shape[1], head_w["weight"].shape[0])
-            head.load_state_dict(head_w)
-            self.heads[name] = head.to(self.device).eval()
+            # get the head manually
+            head_w = {}
+            for key in list(weights.keys()):
+                if "classifier" in key:
+                    new_k = key.split("classifier.")[-1]
+                    head_w[new_k] = weights[key]
+                    
+            # shape is (out, in)
+            out_sz = head_w["weight"].shape[0]
+            in_sz = head_w["weight"].shape[1]
+            
+            hd = torch.nn.Linear(in_sz, out_sz)
+            hd.load_state_dict(head_w)
+            hd = hd.to(self.device)
+            hd.eval()
+            
+            self.class_heads[n] = hd
 
             if self.model is None:
-                self.model = PeftMixedModel(base, cfg, adapter_name=name)
+                self.model = PeftMixedModel(base_vit, conf, adapter_name=n)
             else:
-                self.model.add_adapter(name, cfg)
-            adapter_w = {k: v for k, v in w.items() if "classifier" not in k}
-            set_peft_model_state_dict(self.model, adapter_w, adapter_name=name)
+                self.model.add_adapter(n, conf)
+                
+            # now get the rest of the weights to load into peft
+            adp_weights = {}
+            for k in weights:
+                if "classifier" not in k:
+                    adp_weights[k] = weights[k]
+                    
+            set_peft_model_state_dict(self.model, adp_weights, adapter_name=n)
 
-        self.model.to(self.device).eval()
+        self.model.to(self.device)
+        self.model.eval()
 
-    def preprocess(self, images):
-        # images is list of rgb numpy arrays
-        return self.processor(images=images, return_tensors="pt")["pixel_values"].to(self.device)
+    def preprocess(self, imgs):
+        out = self.processor(images=imgs, return_tensors='pt')
+        return out['pixel_values'].to(self.device)
 
     @torch.no_grad()
-    def predict(self, name, pixel_values):
-        # returns probs and the cls features (used later for router)
+    def predict(self, name, x):
         self.model.set_adapter(name)
-        feats = self.model(pixel_values=pixel_values).logits
-        probs = self.heads[name](feats).softmax(dim=-1)
-        return probs, feats
+        
+        out = self.model(pixel_values=x)
+        f = out.logits
+        
+        # pass thru specific head
+        preds = self.class_heads[name](f)
+        
+        return preds.softmax(dim=-1), f
 
     def labels(self, name):
-        return self.adapters[name]["id2label"]
+        return self.all_adapters[name]['id2label']
