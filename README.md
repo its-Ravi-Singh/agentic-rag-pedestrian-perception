@@ -1,4 +1,20 @@
-# Pedestrian Behavior and Scene Contextual Analysis using PEFT
+# Agentic + Retrieval-Augmented Pedestrian Perception
+
+Independent study at the University at Buffalo (Fall 2026), supervised by Prof. Shamsad Parvin.
+
+This repo starts from the code of *Multi-Attribute Scene Context and Pedestrian Behaviour Recognition using PEFT-Tuned ViT* (Reddi, Kusuma & Parvin, ACM JATS 2026, [doi:10.1145/3833879](https://doi.org/10.1145/3833879)): YOLOv8 detection plus a frozen ViT-B/16 with eight PEFT adapters (LoRA, LoHa, AdaLoRA) on the JAAD dataset. That original pipeline is described below, and its scripts are in `legacy/`.
+
+My work in this repo so far (Oct 2026):
+- Restructured the code into the `src/apr` package, with adapter paths in `configs/adapters.yaml`
+- A JAAD loader that uses the official video splits
+- One shared ViT backbone carrying all eight adapters, with a classifier head per attribute
+- A feature cache script that stores frame embeddings, adapter probabilities and per-adapter latency
+
+In progress: a learned router that picks which adapters to run, a confidence check with escalation, a FAISS scene memory, and training and evaluation on PIE and BDD100K. The full plan is in [docs/ROADMAP.md](docs/ROADMAP.md).
+
+---
+
+# Pedestrian Behavior and Scene Contextual Analysis using PEFT (original pipeline)
 
 This project provides an end-to-end pipeline for analyzing pedestrian behavior and scene context from the JAAD dataset. It leverages a fine-tuned YOLOv8 model for pedestrian detection and a suite of Vision Transformer (ViT) models enhanced with Parameter-Efficient Fine-Tuning (PEFT) adapters for detailed attribute classification.
 
